@@ -9,9 +9,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { registerFn } from "@/services/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 
 const RegisterSchema = z.object({
@@ -34,11 +36,17 @@ const Register = () => {
     },
   });
 
+  const { register, state } = useAuth();
+  const navigate = useNavigate();
+
   const onSubmit = (data: RegisterData) => {
-    registerFn(data);
+    register(data);
+    if (state.accessToken) {
+      navigate("/");
+    }
   };
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm my-20">
       <CardHeader>
         <CardTitle className="text-2xl">Register</CardTitle>
       </CardHeader>
@@ -86,6 +94,7 @@ const Register = () => {
                   <FormControl>
                     <Input
                       placeholder="Please enter your password"
+                      type="password"
                       {...field}
                     />
                   </FormControl>
@@ -95,6 +104,15 @@ const Register = () => {
             />
             <Button type="submit">Submit</Button>
           </form>
+          <div className="text-center my-2 text-sm">
+            already have account{" "}
+            <Link
+              to="/login"
+              className="text-blue-500 underline underline-offset-2"
+            >
+              click here
+            </Link>
+          </div>
         </Form>
       </CardContent>
     </Card>
