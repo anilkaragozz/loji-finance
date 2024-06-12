@@ -14,34 +14,72 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Switch } from "@/components/ui/switch";
-import { Pencil } from "lucide-react";
+import { Pencil, CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
-const DebtSchema = z.object({
+export const DebtSchema = z.object({
+  id: z.string(),
   debtName: z.string(),
   lenderName: z.string(),
-  debtAmount: z.number(),
-  interestRate: z.number(),
+  debtAmount: z.string(),
+  interestRate: z.string(),
   description: z.string(),
   isActive: z.boolean(),
-  amount: z.number(),
-  paymentStart: z.string(),
-  installment: z.number(),
+  amount: z.string(),
+  paymentStart: z.date(),
+  installment: z.string(),
+  userId: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  paymentPlan: z.array(
+    z.object({
+      paymentDate: z.date(),
+      paymentAmount: z.string(),
+    })
+  ),
 });
 
-export type DebptData = z.infer<typeof DebtSchema>;
+export type DebtData = z.infer<typeof DebtSchema>;
 
-const DebptUpdateForm = () => {
-  const debptUpdateForm = useForm<DebptData>({
+const DebtUpdateForm = () => {
+  const debtUpdateForm = useForm<DebtData>({
     resolver: zodResolver(DebtSchema),
-    defaultValues: {},
+    defaultValues: {
+      id: "get from row",
+      debtName: "",
+      lenderName: "",
+      debtAmount: "",
+      interestRate: "",
+      description: "",
+      isActive: false,
+      amount: "",
+      paymentStart: new Date(),
+      installment: "",
+      userId: "get from row",
+      createdAt: "",
+      updatedAt: "",
+      paymentPlan: [
+        {
+          paymentDate: new Date(),
+          paymentAmount: "",
+        },
+      ],
+    },
   });
 
-  const onSubmit = async (data: DebptData) => {
+  const onSubmit = async (data: DebtData) => {
     console.log(data);
   };
 
@@ -58,13 +96,13 @@ const DebptUpdateForm = () => {
             <DialogTitle>Edit Debt</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <Form {...debptUpdateForm}>
+            <Form {...debtUpdateForm}>
               <form
-                onSubmit={debptUpdateForm.handleSubmit(onSubmit)}
+                onSubmit={debtUpdateForm.handleSubmit(onSubmit)}
                 className="space-y-4"
               >
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="debtName"
                   render={({ field }) => (
                     <FormItem>
@@ -80,7 +118,7 @@ const DebptUpdateForm = () => {
                   )}
                 />
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="lenderName"
                   render={({ field }) => (
                     <FormItem>
@@ -96,7 +134,7 @@ const DebptUpdateForm = () => {
                   )}
                 />
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="debtAmount"
                   render={({ field }) => (
                     <FormItem>
@@ -112,7 +150,7 @@ const DebptUpdateForm = () => {
                   )}
                 />
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="interestRate"
                   render={({ field }) => (
                     <FormItem>
@@ -128,7 +166,7 @@ const DebptUpdateForm = () => {
                   )}
                 />
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem>
@@ -144,7 +182,7 @@ const DebptUpdateForm = () => {
                   )}
                 />
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="isActive"
                   render={() => (
                     <FormItem>
@@ -157,7 +195,7 @@ const DebptUpdateForm = () => {
                   )}
                 />
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="amount"
                   render={({ field }) => (
                     <FormItem>
@@ -173,23 +211,47 @@ const DebptUpdateForm = () => {
                   )}
                 />
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="paymentStart"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Payment Start</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Please enter the payment start"
-                          {...field}
-                        />
-                      </FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-[180px] pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
-                  control={debptUpdateForm.control}
+                  control={debtUpdateForm.control}
                   name="installment"
                   render={({ field }) => (
                     <FormItem>
@@ -214,4 +276,4 @@ const DebptUpdateForm = () => {
   );
 };
 
-export default DebptUpdateForm;
+export default DebtUpdateForm;
