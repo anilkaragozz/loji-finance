@@ -34,72 +34,79 @@ const Login = () => {
     },
   });
 
-  const { login, state } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const onSubmit = (data: LoginData) => {
-    login(data);
-    if (state.accessToken) {
+  const onSubmit = async (data: LoginData) => {
+    try {
+      await login(data);
       navigate("/");
+    } catch (error) {
+      console.error("Login failed:", error);
     }
   };
 
   return (
-    <Card className="w-full max-w-sm my-20">
-      <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
-      </CardHeader>
+    <div className="flex justify-center items-center my-20">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+        </CardHeader>
 
-      <CardContent>
-        <Form {...loginForm}>
-          <form
-            onSubmit={loginForm.handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
-            <FormField
-              control={loginForm.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-mail</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Please enter your e-mail" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={loginForm.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Please enter your password"
-                      type="password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
-          <div className="text-center my-2 text-sm">
-            if you didnt have an account{" "}
-            <Link
-              to="/register"
-              className="text-blue-500 underline underline-offset-2"
+        <CardContent>
+          <Form {...loginForm}>
+            <form
+              onSubmit={loginForm.handleSubmit(onSubmit)}
+              className="space-y-4"
             >
-              click here
-            </Link>
-          </div>
-        </Form>
-      </CardContent>
-    </Card>
+              <FormField
+                control={loginForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>E-mail</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Please enter your e-mail"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={loginForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Please enter your password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Submit</Button>
+            </form>
+            <div className="text-center my-2 text-sm">
+              if you didnt have an account{" "}
+              <Link
+                to="/register"
+                className="text-blue-500 underline underline-offset-2"
+              >
+                click here
+              </Link>
+            </div>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
