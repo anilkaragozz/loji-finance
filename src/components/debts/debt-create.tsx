@@ -1,0 +1,217 @@
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Switch } from "@/components/ui/switch";
+import { PlusCircle } from "lucide-react";
+
+const DebtSchema = z.object({
+  debtName: z.string(),
+  lenderName: z.string(),
+  debtAmount: z.number(),
+  interestRate: z.number(),
+  description: z.string(),
+  isActive: z.boolean(),
+  amount: z.number(),
+  paymentStart: z.string(),
+  installment: z.number(),
+});
+
+export type DebptData = z.infer<typeof DebtSchema>;
+
+const DebptCreateForm = () => {
+  const debptCreateForm = useForm<DebptData>({
+    resolver: zodResolver(DebtSchema),
+    defaultValues: {},
+  });
+
+  const onSubmit = async (data: DebptData) => {
+    console.log(data);
+  };
+
+  return (
+    <>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">
+            Create New Debt <PlusCircle className="h-4 w-4 ml-2" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Create Debt</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Form {...debptCreateForm}>
+              <form
+                onSubmit={debptCreateForm.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={debptCreateForm.control}
+                  name="debtName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Debt Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Please enter the debt name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={debptCreateForm.control}
+                  name="lenderName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Lender Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Please enter the lender name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={debptCreateForm.control}
+                  name="debtAmount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Debt Amount</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Please enter the debt amount"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={debptCreateForm.control}
+                  name="interestRate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Interest Rate</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Please enter the interest rate"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={debptCreateForm.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Please enter the description"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={debptCreateForm.control}
+                  name="isActive"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <FormControl>
+                        <Switch id="isActice" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={debptCreateForm.control}
+                  name="amount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Amount</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Please enter the amount"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={debptCreateForm.control}
+                  name="paymentStart"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Payment Start</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Please enter the payment start"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={debptCreateForm.control}
+                  name="installment"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Installment</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Please enter the installment"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+            </Form>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
+
+export default DebptCreateForm;
