@@ -1,30 +1,78 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Lojiper Finance App
 
-Currently, two official plugins are available:
+This project is prepared for the job application process for Lojiper company.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## Features
+Register User & Login User
+- An application that can be preferred for multiple users with its user registration and login feature. When user registration is done, user registration will be provided after filling in the Register Form correctly, and in order to login, it will be sufficient to fill in and save the form with the registered user information. `ps: (email: d2@me.com, password: 123456)`  
+------
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Dashboard Page
+- Users can access a summary and graphical page to track their debt status.
+---
+Debts Page
+- Users can view a list of previously saved debts.
+- Users can add a new debt to this list.
+- Users can edit and delete their debts
+-------------
+Payment Plan Page
 
-- Configure the top-level `parserOptions` property like this:
+- Users can view payment plans for their current debts.
+-------------
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+
+
+
+
+## Tech Stack
+
+**Frontend:** 
+- React (v18.3.1), ContextApi 
+- TailwindCSS (v3.4.4)
+- React Hook Form (v7.51.5)
+- React Router Dom (v6.23.1)
+- Tanstack/React Query (v5.45.0) 
+- Axios (v1.7.2)
+- Radix & Shadcn UI (0.8.0)
+- Zod (v3.23.8)
+- Recharts (v2.13.0-alpha.4)
+- Lucide React (v0.394.0)
+- Vite (v5.2.0)
+
+
+## Installation
+**Requirements** 
+
+- Node.js
+- npm
+
+1 - Clone the Repository
+
+https://github.com/anilkaragozz/loji-finance.git
+
+2 - Open the project with any code editor
+
+3 - Open a terminal screen and go to porject director on your local machine
+
+4 - After gaining access to the file location  
+```bash
+  npm install
 ```
+```bash
+  npm run build
+```
+```bash
+  npm run dev 
+```
+9 - When we complete the steps respectively, our frontend project will be running at http://localhost:5173`
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+
+
+## Authors
+
+- [@anilkaragozz](https://www.github.com/anilkaragozz)
+- [anilkaragoz89@gmail.com](anilkaragoz89@gmail.com)
+
