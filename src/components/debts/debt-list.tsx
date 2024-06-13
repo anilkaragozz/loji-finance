@@ -6,16 +6,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Eye } from "lucide-react";
+import { FolderKanban } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import DebtUpdateForm from "@/components/debts/debt-update";
 import DebtCreateForm from "@/components/debts/debt-create";
-import { useGetDebts } from "@/services/queries";
+import { useGetDebts } from "@/services/hooks/queries";
 import { OrbitProgress } from "react-loading-indicators";
 import DebtDelete from "@/components/debts/debt-delete";
 import { z } from "zod";
 import { useTotalDebt } from "@/hooks/useTotalDebt";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const DebtListSchema = z.object({
   id: z.string(),
@@ -38,6 +40,7 @@ const DebtListSchema = z.object({
 export type DebtListData = z.infer<typeof DebtListSchema>;
 
 const DebtTable = () => {
+  const navigate = useNavigate();
   const totalDebt = useTotalDebt();
   const { data, error, isLoading } = useGetDebts();
 
@@ -60,15 +63,12 @@ const DebtTable = () => {
         <CardHeader className="flex flex-row items-center">
           <div className="grid gap-2">
             <CardTitle>Debts</CardTitle>
+            <div className="flex justify-center items-center text-red-700 font-semibold">
+              Total Debt: &nbsp;
+              <p className=" text-black hover:text-red-700">$ {totalDebt}</p>
+            </div>
           </div>
-          <div className="m-auto gap-2">
-            <CardTitle>
-              <div className="flex justify-center items-center text-red-700">
-                Total Debt: &nbsp;
-                <p className=" text-black hover:text-red-700">$ {totalDebt}</p>
-              </div>
-            </CardTitle>
-          </div>
+
           <div className="ml-auto gap-1">
             <DebtCreateForm />
           </div>
@@ -110,10 +110,17 @@ const DebtTable = () => {
                   </TableCell>
                   <TableCell>${debt.installment}</TableCell>
                   <TableCell>
-                    <DebtUpdateForm id={debt.id} />
+                    <DebtUpdateForm data={debt} />
                   </TableCell>
                   <TableCell>
-                    <Eye className="h-4 w-4" />
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        navigate(`/payment-plan/${debt.id}`);
+                      }}
+                    >
+                      <FolderKanban className="h-4 w-4" />
+                    </Button>
                   </TableCell>
                   <TableCell>
                     <DebtDelete id={debt.id} />
