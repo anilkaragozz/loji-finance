@@ -1,5 +1,5 @@
 import { DebtData } from "@/components/debts/debt-update";
-import { useGetDebts } from "@/services/queries";
+import { useGetDebts } from "@/services/hooks/queries";
 
 export const useTotalDebt = () => {
   const { data } = useGetDebts();

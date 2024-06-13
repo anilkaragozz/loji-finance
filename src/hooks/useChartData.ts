@@ -1,4 +1,4 @@
-import { useGetDebts } from "@/services/queries";
+import { useGetDebts } from "@/services/hooks/queries";
 
 export const useBarChartData = () => {
   const { data } = useGetDebts();

@@ -1,18 +1,10 @@
 import { useBarChartData } from "@/hooks/useChartData";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
 
 const BarCharts = () => {
   const chartData = useBarChartData();
 
   return (
-    
     <BarChart
       width={400}
       height={300}
@@ -23,12 +15,12 @@ const BarCharts = () => {
         left: 20,
         bottom: 5,
       }}
-      style={{ position: "none" }}
+      style={{ position: "static" }}
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
       <YAxis />
-      <Tooltip />
+      <Legend wrapperStyle={{ position: "static" }} />
       <Bar dataKey="amount" fill="#8884d8" />
       <Bar dataKey="debtAmount" fill="#82ca9d" />
     </BarChart>

@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useDeleteDebtById } from "@/services/mutations";
+import { useDeleteDebtById } from "@/services/hooks/mutations";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
