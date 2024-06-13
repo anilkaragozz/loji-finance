@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosClient } from "@/services/api";
+import { DebtListData } from "@/components/debts/debt-list";
 
 export function useGetDebts() {
-  return useQuery({
+  return useQuery<DebtListData[]>({
     queryKey: ["getDebts"],
-    queryFn: () => axiosClient.get("/finance/debt").then((res) => res.data),
+    queryFn: () =>
+      axiosClient.get("/finance/debt").then((res) => res.data.data),
   });
 }
 
