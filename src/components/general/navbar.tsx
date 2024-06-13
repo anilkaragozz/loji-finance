@@ -31,12 +31,6 @@ const Navbar = () => {
           >
             Debts
           </Link>
-          <Link
-            to="/payment-plan"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Payment Plans
-          </Link>
         </nav>
 
         <Sheet>
@@ -68,12 +62,6 @@ const Navbar = () => {
                 className="text-muted-foreground transition-colors hover:text-foreground"
               >
                 Debts
-              </Link>
-              <Link
-                to="/payments"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-              >
-                Payment Plans
               </Link>
             </nav>
           </SheetContent>
