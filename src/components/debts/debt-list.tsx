@@ -9,10 +9,33 @@ import {
 import { Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
-import DebtUpdateForm, { DebtData } from "@/components/debts/debt-update";
+import DebtUpdateForm from "@/components/debts/debt-update";
 import DebtCreateForm from "@/components/debts/debt-create";
 import { useGetDebts } from "@/services/queries";
 import { OrbitProgress } from "react-loading-indicators";
+import DebtDelete from "@/components/debts/debt-delete";
+import { z } from "zod";
+
+const DebtListSchema = z.object({
+  id: z.string(),
+  debtName: z.string(),
+  lenderName: z.string(),
+  debtAmount: z.coerce.number(),
+  interestRate: z.coerce.number(),
+  description: z.string(),
+
+  amount: z.coerce.number(),
+  paymentStart: z.date(),
+  installment: z.coerce.number(),
+  paymentPlan: z.array(
+    z.object({
+      paymentDate: z.date(),
+      paymentAmount: z.coerce.number(),
+    })
+  ),
+});
+
+export type DebtListData = z.infer<typeof DebtListSchema>;
 
 const DebtTable = () => {
   const { data, error, isLoading } = useGetDebts();
@@ -47,9 +70,6 @@ const DebtTable = () => {
               <TableRow>
                 <TableHead>Debt Name</TableHead>
                 <TableHead>Description</TableHead>
-                <TableHead>Created At</TableHead>
-                <TableHead>Updated At</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead>Lender Name</TableHead>
                 <TableHead>Debt Amount</TableHead>
                 <TableHead>Interest Rate</TableHead>
@@ -62,16 +82,16 @@ const DebtTable = () => {
                 <TableHead className="text-black font-bold">
                   Payment Plan
                 </TableHead>
+                <TableHead className="text-black font-bold">
+                  Delete Debt
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.data.map((debt: DebtData) => (
+              {data.data.map((debt: DebtListData) => (
                 <TableRow key={debt.id}>
                   <TableCell>{debt.debtName}</TableCell>
-                  <TableCell>{debt.description}</TableCell>
-                  <TableCell>{format(debt.createdAt, "dd-MM-yyyy")}</TableCell>
-                  <TableCell>{format(debt.updatedAt, "dd-MM-yyyy")}</TableCell>
-                  <TableCell>{debt.isActive ? "Active" : "Inactive"}</TableCell>
+                  <TableCell className="max-w-60">{debt.description}</TableCell>
                   <TableCell>{debt.lenderName}</TableCell>
                   <TableCell>${debt.debtAmount}</TableCell>
                   <TableCell>{debt.interestRate}%</TableCell>
@@ -81,10 +101,13 @@ const DebtTable = () => {
                   </TableCell>
                   <TableCell>${debt.installment}</TableCell>
                   <TableCell>
-                    <DebtUpdateForm />
+                    <DebtUpdateForm id={debt.id} />
                   </TableCell>
                   <TableCell>
                     <Eye className="h-4 w-4" />
+                  </TableCell>
+                  <TableCell>
+                    <DebtDelete id={debt.id} />
                   </TableCell>
                 </TableRow>
               ))}

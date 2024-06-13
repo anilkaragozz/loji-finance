@@ -70,15 +70,8 @@ const DebtCreateForm = () => {
       ],
     },
   });
-  const { setValue } = debtCreateForm;
-  const { mutate } = useCreateDebt();
 
-  const onSubmit = async (data: DebtCreateData) => {
-    mutate(data);
-    console.log(data);
-  };
-
-  const handlePaymentPlan = async (data: DebtCreateData) => {
+  const handlePaymentPlan = (data: DebtCreateData) => {
     const { amount, installment, interestRate, paymentStart } = data;
 
     const totalAmount =
@@ -93,8 +86,13 @@ const DebtCreateForm = () => {
       };
     });
 
-    setValue("paymentPlan", paymentPlan);
-    console.log("paymentPlan", paymentPlan);
+    debtCreateForm.setValue("paymentPlan", paymentPlan);
+  };
+
+  const { mutate, isPending } = useCreateDebt();
+
+  const onSubmit = async (data: DebtCreateData) => {
+    mutate(data);
   };
 
   return (
@@ -105,7 +103,7 @@ const DebtCreateForm = () => {
             Create New Debt <PlusCircle className="h-4 w-4 ml-2" />
           </Button>
         </DialogTrigger>
-        <DialogContent className=" min-w-[50%] sm:max-w-[425px]">
+        <DialogContent className="min-w-[50%] sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Create Debt</DialogTitle>
           </DialogHeader>
@@ -181,6 +179,7 @@ const DebtCreateForm = () => {
                     )}
                   />
                 </div>
+
                 <div className="col-span-1 space-y-4">
                   <FormField
                     control={debtCreateForm.control}
@@ -269,17 +268,6 @@ const DebtCreateForm = () => {
                   />
                 </div>
 
-                <div className="col-span-2 space-y-4">
-                  <Button
-                    className="w-full"
-                    onClick={() =>
-                      handlePaymentPlan(debtCreateForm.getValues())
-                    }
-                  >
-                    Create Payment Plan
-                  </Button>
-                </div>
-
                 <div className="col-span-2">
                   <FormField
                     control={debtCreateForm.control}
@@ -323,13 +311,24 @@ const DebtCreateForm = () => {
                   />
                 </div>
 
-                <div className="col-span-2 space-y-4">
-                  <Button type="submit" className="w-full">
-                    Submit
+                <div className="col-span-2 flex justify-center items-center my-2">
+                  <Button type="submit" disabled={isPending}>
+                    Create Debt
                   </Button>
                 </div>
               </form>
             </Form>
+
+            <div className="flex justify-center items-center">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  handlePaymentPlan(debtCreateForm.getValues());
+                }}
+              >
+                Create Payment Plan
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
