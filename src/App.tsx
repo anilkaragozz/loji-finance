@@ -4,7 +4,7 @@ import Dashboard from "@/pages/dashboard/Dashboard";
 import PrivateRoute from "@/PrivateRouter";
 import Register from "@/pages/auth/Register";
 import Debts from "@/pages/debts/Debts";
-import PaymentPlan from "@/components/payment/payment-plan";
+import Payment from "@/pages/payment/Payment";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/debts" element={<Debts />} />
-          <Route path="/payment-plan" element={<PaymentPlan />} />
+          <Route path="/payment-plan/:id" element={<Payment />} />
         </Route>
       </Routes>
     </>
