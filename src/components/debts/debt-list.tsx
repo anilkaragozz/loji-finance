@@ -15,6 +15,7 @@ import { useGetDebts } from "@/services/queries";
 import { OrbitProgress } from "react-loading-indicators";
 import DebtDelete from "@/components/debts/debt-delete";
 import { z } from "zod";
+import { useTotalDebt } from "@/hooks/useTotalDebt";
 
 const DebtListSchema = z.object({
   id: z.string(),
@@ -23,7 +24,6 @@ const DebtListSchema = z.object({
   debtAmount: z.coerce.number(),
   interestRate: z.coerce.number(),
   description: z.string(),
-
   amount: z.coerce.number(),
   paymentStart: z.date(),
   installment: z.coerce.number(),
@@ -38,6 +38,7 @@ const DebtListSchema = z.object({
 export type DebtListData = z.infer<typeof DebtListSchema>;
 
 const DebtTable = () => {
+  const totalDebt = useTotalDebt();
   const { data, error, isLoading } = useGetDebts();
 
   if (isLoading)
@@ -55,10 +56,18 @@ const DebtTable = () => {
   }
   return (
     <>
-      <Card x-chunk="dashboard-01-chunk-4">
+      <Card className="max-w-md sm:max-w-2xl md:max-w-3xl lg:max-w-full">
         <CardHeader className="flex flex-row items-center">
           <div className="grid gap-2">
             <CardTitle>Debts</CardTitle>
+          </div>
+          <div className="m-auto gap-2">
+            <CardTitle>
+              <div className="flex justify-center items-center text-red-700">
+                Total Debt: &nbsp;
+                <p className=" text-black hover:text-red-700">$ {totalDebt}</p>
+              </div>
+            </CardTitle>
           </div>
           <div className="ml-auto gap-1">
             <DebtCreateForm />
@@ -88,7 +97,7 @@ const DebtTable = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.data.map((debt: DebtListData) => (
+              {data?.map((debt: DebtListData) => (
                 <TableRow key={debt.id}>
                   <TableCell>{debt.debtName}</TableCell>
                   <TableCell className="max-w-60">{debt.description}</TableCell>
